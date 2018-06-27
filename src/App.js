@@ -1,6 +1,9 @@
 import React from 'react';
-// import * as BooksAPI from './BooksAPI'
+import { get, getAll, update, search } from './BooksAPI';
+import { Route } from 'react-router-dom';
 import './App.css';
+import MainScreen from './container/MainScreen';
+import Search from './container/Search';
 
 class BooksApp extends React.Component {
   state = {
@@ -13,7 +16,12 @@ class BooksApp extends React.Component {
   };
 
   render() {
-    return <div className="app" />;
+    return (
+      <div className="app">
+        <Route path="/" exact render={() => <MainScreen />} />
+        <Route path="/search" render={() => <Search />} />
+      </div>
+    );
   }
 }
 
