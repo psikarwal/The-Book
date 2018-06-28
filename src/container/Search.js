@@ -9,18 +9,22 @@ export default class Search extends Component {
     error: ''
   };
   searchQuery = query => {
-    search(query, 15).then(result => {
-      if (!result) {
-        this.setState({ result: [], error: '❌ No result found' });
-      } else if (result.error) {
-        this.setState({
-          result: [],
-          error: "😌 Sorry! I couldn't find any book regarding your query."
-        });
-      } else {
-        this.setState({ result, error: '' });
-      }
-    });
+    if (query) {
+      search(query, 15).then(result => {
+        if (!result) {
+          this.setState({ result: [], error: '❌ No result found' });
+        } else if (result.error) {
+          this.setState({
+            result: [],
+            error: "😌 Sorry! I couldn't find any book regarding your query."
+          });
+        } else {
+          this.setState({ result, error: '' });
+        }
+      });
+    } else {
+      this.setState({ result: [], error: '' });
+    }
   };
   render() {
     const { handleShelfChange = () => {} } = this.props;
