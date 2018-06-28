@@ -5,8 +5,9 @@ export default class Book extends Component {
   render() {
     const { book = {}, handleShelfChange = () => {} } = this.props;
     const link =
-      book.imageLinks.thumbnail ||
-      'https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg';
+      book.imageLinks &&
+      (book.imageLinks.thumbnail ||
+        'https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg');
 
     const handleChange = (value, book) => {
       book.shelf = value;
@@ -27,20 +28,23 @@ export default class Book extends Component {
               }}
             />
             <div className="book-shelf-changer">
-              <select onChange={e => handleChange(e.target.value, book)}>
+              <select
+                onChange={e => handleChange(e.target.value, book)}
+                value={book.shelf}
+              >
                 <option value="move" disabled>
                   Move to...
                 </option>
+                <option value="none">None</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
                 <option value="read">Read</option>
-                <option value="none">None</option>
               </select>
             </div>
           </div>
           <div className="book-title">{book.title || '-'}</div>
           <div className="book-authors">
-            {book.authors.join(', ') || 'Unknown Author'}
+            {book.authors ? book.authors.join(', ') : 'Unknown Author'}
           </div>
         </div>
       </li>
