@@ -9,11 +9,14 @@ export default class Search extends Component {
     error: ''
   };
   searchQuery = query => {
-    search(query, 5).then(result => {
+    search(query, 15).then(result => {
       if (!result) {
-        this.setState({ result: [], error: 'No result found' });
+        this.setState({ result: [], error: '❌ No result found' });
       } else if (result.error) {
-        this.setState({ result: [], error: 'Please enter a valid query' });
+        this.setState({
+          result: [],
+          error: "😌 Sorry! I couldn't find any book regarding your query."
+        });
       } else {
         this.setState({ result, error: '' });
       }
