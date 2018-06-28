@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAll, search } from './BooksAPI';
+import { getAll } from './BooksAPI';
 import { Route } from 'react-router-dom';
 import './App.css';
 import MainScreen from './container/MainScreen';
@@ -20,8 +20,6 @@ class BooksApp extends React.Component {
   };
 
   render() {
-    console.log(16, this.state);
-
     return (
       <div className="app">
         <Route
