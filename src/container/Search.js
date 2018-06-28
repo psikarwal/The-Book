@@ -1,8 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { search } from '../BooksAPI';
+import Book from '../component/Book';
 
 export default class Search extends Component {
+  state = {
+    result: [],
+    error: ''
+  };
+  searchQuery = query => {
+    search(query, 5).then(result => {
+      if (!result) {
+        this.setState({ result: [], error: 'No result found' });
+      } else if (result.error) {
+        this.setState({ result: [], error: 'Please enter a valid query' });
+      } else {
+        this.setState({ result, error: '' });
+      }
+    });
+  };
   render() {
+    console.log(9, this.state);
+    const { handleShelfChange = () => {} } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -10,19 +29,26 @@ export default class Search extends Component {
             Close
           </Link>
           <div className="search-books-input-wrapper">
-            {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-            <input type="text" placeholder="Search by title or author" />
+            <input
+              type="text"
+              placeholder="Search by title or author"
+              onChange={e => this.searchQuery(e.target.value)}
+            />
           </div>
         </div>
+
         <div className="search-books-results">
-          <ol className="books-grid" />
+          <ol className="books-grid">
+            {this.state.error
+              ? this.state.error
+              : this.state.result.map((book, index) => (
+                  <Book
+                    key={`${index + 1}`}
+                    book={book}
+                    handleShelfChange={handleShelfChange}
+                  />
+                ))}
+          </ol>
         </div>
       </div>
     );
