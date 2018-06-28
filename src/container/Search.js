@@ -23,7 +23,6 @@ export default class Search extends Component {
     });
   };
   render() {
-    console.log(9, this.state);
     const { handleShelfChange = () => {} } = this.props;
     return (
       <div className="search-books">
