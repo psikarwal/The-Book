@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { search } from '../BooksAPI';
 import Book from '../component/Book';
+import { DebounceInput } from 'react-debounce-input';
 
 export default class Search extends Component {
   state = {
     result: [],
     error: ''
   };
-  searchQuery = query => {
+
+  searchQuery = event => {
+    const query = event.target.value;
+    const { books } = this.props;
     if (query) {
       search(query, 15).then(result => {
         if (!result) {
@@ -19,13 +23,20 @@ export default class Search extends Component {
             error: "😌 Sorry! I couldn't find any book regarding your query."
           });
         } else {
-          this.setState({ result, error: '' });
+          const booksWithShelves = result.map(book => {
+            const find = books.find(buk => buk.id === book.id);
+            if (find) book.shelf = find.shelf;
+            else book.shelf = 'none';
+            return book;
+          });
+          this.setState({ result: booksWithShelves, error: '' });
         }
       });
     } else {
       this.setState({ result: [], error: '' });
     }
   };
+
   render() {
     const { handleShelfChange = () => {} } = this.props;
     return (
@@ -35,10 +46,10 @@ export default class Search extends Component {
             Close
           </Link>
           <div className="search-books-input-wrapper">
-            <input
-              type="text"
+            <DebounceInput
               placeholder="Search by title or author"
-              onChange={e => this.searchQuery(e.target.value)}
+              debounceTimeout={300}
+              onChange={this.searchQuery}
             />
           </div>
         </div>

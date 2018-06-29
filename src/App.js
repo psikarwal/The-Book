@@ -15,7 +15,7 @@ class BooksApp extends React.Component {
   handleShelfChange = book => {
     this.setState(state => ({
       ...state,
-      books: state.books.filter(b => b.id !== book.id).concat([book])
+      books: [...state.books.filter(buk => buk.id !== book.id), book]
     }));
   };
 
@@ -34,7 +34,12 @@ class BooksApp extends React.Component {
         />
         <Route
           path="/search"
-          render={() => <Search handleShelfChange={this.handleShelfChange} />}
+          render={() => (
+            <Search
+              books={this.state.books}
+              handleShelfChange={this.handleShelfChange}
+            />
+          )}
         />
       </div>
     );
